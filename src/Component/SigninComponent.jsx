@@ -2,6 +2,8 @@ import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { TextField, Button } from "@mui/material";
+import axios from "axios";
+
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string().required("Required"),
@@ -16,7 +18,21 @@ export const Signin = () => (
       }}
       validationSchema={LoginSchema}
       onSubmit={(values) => {
-        console.log(values);
+        const formData = new FormData();
+        //   formData.append("file", values.avatar); // Append the image file to the form data
+        formData.append("email", values.email);
+        formData.append("password", values.password);
+        for (const [key, value] of formData.entries()) {
+          console.log(`${key}: ${value}`);
+        }
+        axios
+          .post("http://localhost:8000/seller/signin", formData)
+          .then((response) => {
+            console.log("Response from server:", response.data);
+          })
+          .catch((error) => {
+            console.error("server error");
+          });
       }}
     >
       {({ errors, touched, setFieldValue }) => (

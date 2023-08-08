@@ -37,7 +37,7 @@ export const CustomerHeader = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ bgcolor: "green" }}>
+    <AppBar position="static" sx={{ bgcolor: "gray" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />

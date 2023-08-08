@@ -6,7 +6,7 @@ import { Facebook, Twitter, Instagram } from "@mui/icons-material";
 const FooterContainer = styled(Container)({
   position: "fixed",
   bottom: 0,
-  backgroundColor: "green",
+  backgroundColor: "gray",
 });
 
 export const CustomerFooter = () => {

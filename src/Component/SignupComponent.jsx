@@ -10,7 +10,7 @@ import {
   FormControl,
   FormLabel,
 } from "@mui/material";
-//import axios from "axios";
+import axios from "axios";
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string().required("Required"),
@@ -21,7 +21,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 export const SignUp = () => {
-  const [value] = React.useState(""); // Step 1: Define state to hold the radio value
+  const [value] = React.useState(""); 
   return (
     <div>
       <div style={{ padding: "50px" }}>
@@ -46,16 +46,14 @@ export const SignUp = () => {
             for (const [key, value] of formData.entries()) {
               console.log(`${key}: ${value}`);
             }
-
-            // Server Attach Code.
-            //   axios
-            //     .post("http://localhost:4000/seller/signup", formData)
-            //     .then((response) => {
-            //       console.log("Response from server:", response.data);
-            //     })
-            //     .catch((error) => {
-            //       console.error("server error");
-            //     });
+            axios
+                .post("http://localhost:8000/seller/signup", formData)
+                .then((response) => {
+                  console.log("Response from server:", response.data);
+                })
+                .catch((error) => {
+                  console.error("server error");
+                });
           }}
         >
           {({ errors, touched, setFieldValue }) => (
@@ -127,9 +125,9 @@ export const SignUp = () => {
                 <RadioGroup
                   aria-labelledby="demo-controlled-radio-buttons-group"
                   name="controlled-radio-buttons-group"
-                  value={value.type} // Use values.type instead of value
+                  value={value.type} 
                   onChange={(event) => {
-                    setFieldValue("type", event.target.value); // Update the "type" value in formik
+                    setFieldValue("type", event.target.value); 
                   }}
                 >
                   <FormControlLabel
