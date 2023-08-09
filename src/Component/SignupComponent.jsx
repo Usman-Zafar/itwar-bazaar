@@ -13,23 +13,23 @@ import {
 import axios from "axios";
 
 const SignupSchema = Yup.object().shape({
-  firstName: Yup.string().required("Required"),
-  lastName: Yup.string().required("Required"),
+  firstname: Yup.string().required("Required"),
+  lastname: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string().min(8, "Too Short!").required("Required"),
   type: Yup.string().required("Please select an account type"),
 });
 
 export const SignUp = () => {
-  const [value] = React.useState(""); 
+  const [value] = React.useState("");
   return (
     <div>
       <div style={{ padding: "50px" }}>
         <h1>Signup</h1>
         <Formik
           initialValues={{
-            firstName: "",
-            lastName: "",
+            firstname: "",
+            lastname: "",
             email: "",
             password: "",
             type: "",
@@ -38,8 +38,8 @@ export const SignUp = () => {
           onSubmit={(values) => {
             const formData = new FormData();
             //   formData.append("file", values.avatar); // Append the image file to the form data
-            formData.append("firstname", values.firstName);
-            formData.append("lastname", values.lastName);
+            formData.append("firstname", values.firstname);
+            formData.append("lastname", values.lastname);
             formData.append("email", values.email);
             formData.append("password", values.password);
             formData.append("type", values.type);
@@ -47,43 +47,48 @@ export const SignUp = () => {
               console.log(`${key}: ${value}`);
             }
             axios
-                .post("http://localhost:8000/seller/signup", formData)
-                .then((response) => {
-                  console.log("Response from server:", response.data);
-                })
-                .catch((error) => {
-                  console.error("server error");
-                });
+              .post("http://localhost:8000/user/signup", values, {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              })
+
+              .then((response) => {
+                console.log("Response from server:", response.data);
+              })
+              .catch((error) => {
+                console.error("server error");
+              });
           }}
         >
           {({ errors, touched, setFieldValue }) => (
             <Form>
               <TextField
-                name="firstName"
+                name="firstname"
                 label="First Name"
                 variant="outlined"
-                error={Boolean(errors.firstName && touched.firstName)}
+                error={Boolean(errors.firstname && touched.firstname)}
                 helperText={
-                  errors.firstName &&
-                  touched.firstName &&
-                  String(errors.firstName)
+                  errors.firstname &&
+                  touched.firstname &&
+                  String(errors.firstname)
                 }
                 onChange={(event) => {
-                  setFieldValue("firstName", event.target.value);
+                  setFieldValue("firstname", event.target.value);
                 }}
               />
               <br />
               <br />
               <TextField
-                name="lastName"
+                name="lastname"
                 label="Last Name"
                 variant="outlined"
-                error={Boolean(errors.lastName && touched.lastName)}
+                error={Boolean(errors.lastname && touched.lastname)}
                 helperText={
-                  errors.lastName && touched.lastName && String(errors.lastName)
+                  errors.lastname && touched.lastname && String(errors.lastname)
                 }
                 onChange={(event) => {
-                  setFieldValue("lastName", event.target.value);
+                  setFieldValue("lastname", event.target.value);
                 }}
               />
               <br />
@@ -125,9 +130,9 @@ export const SignUp = () => {
                 <RadioGroup
                   aria-labelledby="demo-controlled-radio-buttons-group"
                   name="controlled-radio-buttons-group"
-                  value={value.type} 
+                  value={value.type}
                   onChange={(event) => {
-                    setFieldValue("type", event.target.value); 
+                    setFieldValue("type", event.target.value);
                   }}
                 >
                   <FormControlLabel

@@ -26,7 +26,11 @@ export const Signin = () => (
           console.log(`${key}: ${value}`);
         }
         axios
-          .post("http://localhost:8000/seller/signin", formData)
+          .post("http://localhost:8000/user/signin", values, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
           .then((response) => {
             console.log("Response from server:", response.data);
           })
@@ -70,7 +74,9 @@ export const Signin = () => (
             Submit
           </Button>
           <br />
-          <Button href="link to signup page">Dont Have an Account?</Button>
+          <Button href="http://localhost:3000/signup">
+            Dont Have an Account?
+          </Button>
         </Form>
       )}
     </Formik>
