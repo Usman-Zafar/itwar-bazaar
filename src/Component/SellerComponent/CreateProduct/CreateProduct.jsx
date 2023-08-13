@@ -10,11 +10,11 @@ const ProductSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  quantity: Yup.number()
-    .min(0, "Quantity must be a positive number")
-    .required("Required"),
   price: Yup.number()
     .min(0, "Price must be a positive number")
+    .required("Required"),
+  quantity: Yup.number()
+    .min(0, "Quantity must be a positive number")
     .required("Required"),
   description: Yup.string().required("Required"),
   image: Yup.mixed().required("Please select an image file."),
@@ -44,17 +44,19 @@ export const ProductPage = () => (
             formData.append("image", values.image);
 
             axios
-              .post("/seller/product", formData, {
+              .post("http://localhost:8000/user/product", values, {
                 headers: {
-                  "Content-Type": "multipart/form-data",
-                  token: localStorage.getItem("token"),
+                  "Content-Type": "application/json",
+                  Authorization: `${localStorage.getItem("Authorization")}`,
                 },
               })
               .then((response) => {
+                console.log(response);
                 console.log("Product added successfully:", response.data);
               })
               .catch((error) => {
-                console.error("Error adding product:", error);
+                console.error("Error adding product:", error.response);
+                //console.log(localStorage.getItem("token"));
               });
           }}
         >
@@ -76,14 +78,12 @@ export const ProductPage = () => (
                 label="Quantity"
                 variant="standard"
                 type="number"
-                error={Boolean(errors.stockQuantity && touched.stockQuantity)}
+                error={Boolean(errors.quantity && touched.quantity)}
                 helperText={
-                  errors.stockQuantity &&
-                  touched.stockQuantity &&
-                  String(errors.stockQuantity)
+                  errors.quantity && touched.quantity && String(errors.quantity)
                 }
                 onChange={(event) => {
-                  setFieldValue("stockQuantity", event.target.value);
+                  setFieldValue("quantity", event.target.value);
                 }}
               />
               <br />

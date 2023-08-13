@@ -1,85 +1,91 @@
 const Seller = require("../modals/userModal");
 const Product = require("../modals/productModal");
 const Order = require("../modals/orderModal");
-const jwt = require("jsonwebtoken");
-//const { uploadToCloudinary } = require("../middlewares/saveimage");
+//const jwt = require("jsonwebtoken");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 const sellerControllers = {};
 
 // Controller to Signup for Seller
-sellerControllers.Signup = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: "No file uploaded." });
-  }
-  try {
-    const { firstname, lastname, email, password, type } = req.body;
-    // console.log(email, password, firstname, lastname);
+// sellerControllers.Signup = async (req, res) => {
+//   if (!req.file) {
+//     return res.status(400).json({ error: "No file uploaded." });
+//   }
+//   try {
+//     const { firstname, lastname, email, password, type } = req.body;
+//     // console.log(email, password, firstname, lastname);
 
-    const existingSeller = await Seller.findOne({ email });
+//     const existingSeller = await Seller.findOne({ email });
 
-    if (existingSeller) {
-      return res
-        .status(400)
-        .json({ error: "Seller with this email already exists." });
-    }
+//     if (existingSeller) {
+//       return res
+//         .status(400)
+//         .json({ error: "Seller with this email already exists." });
+//     }
 
-    const newSeller = { firstname, lastname, email, password, type };
-    const seller = await Seller.create(newSeller);
-    // uploadToCloudinary(req.file, function (err, cloudinaryUrl) {
-    //   if (err) {
-    //     // Handle the error if the upload to Cloudinary fails
-    //     return res
-    //       .status(500)
-    //       .json({ error: "Failed to upload to Cloudinary" });
-    //   }
-    // });
+//     const newSeller = { firstname, lastname, email, password, type };
+//     const seller = await Seller.create(newSeller);
+//     res.send({ msg: "Seller Signup Successful", seller });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Failed to sign up seller" });
+//   }
+// };
 
-    res.send({ msg: "Seller Signup Successful", seller });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to sign up seller" });
-  }
-};
+// // Controller for Seller for Signin
+// sellerControllers.Signin = async (req, res) => {
+//   const { email, password } = req.body;
 
-// Controller for Seller for Signin
-sellerControllers.Signin = async (req, res) => {
-  const { email, password } = req.body;
+//   try {
+//     const existingSeller = await Seller.findOne({ email });
 
-  try {
-    const existingSeller = await Seller.findOne({ email });
+//     if (!existingSeller) {
+//       return res
+//         .status(404)
+//         .json({ error: "Seller with this email does not exist." });
+//     }
 
-    if (!existingSeller) {
-      return res
-        .status(404)
-        .json({ error: "Seller with this email does not exist." });
-    }
+//     if (existingSeller.password !== password) {
+//       return res.status(401).json({ error: "Incorrect password." });
+//     }
 
-    if (existingSeller.password !== password) {
-      return res.status(401).json({ error: "Incorrect password." });
-    }
-
-    const token = jwt.sign({ id: existingSeller.id }, "Secret-Key", {
-      expiresIn: "340924903294434",
-    });
-    res.json({ token });
-  } catch (error) {
-    res.status(500).json({ message: "Failed to sign in seller" });
-  }
-};
+//     // const token = jwt.sign(
+//     //   { id: existingSeller.id, type: existingSeller.type },
+//     //   "Secret-Key",
+//     //   {
+//     //     expiresIn: "1h",
+//     //   }
+//     // );
+//     // res.json({ token });
+//   } catch (error) {
+//     res.status(500).json({ message: "Failed to sign in seller" });
+//   }
+// };
 
 // Controller to Create Sellers Products
 sellerControllers.createProduct = async (req, res) => {
-  const { name, description, price, stock } = req.body;
-  const sellerId = req.userId;
-
   try {
+    const { name, description, quantity, price } = req.body;
+    const image = req.files.image;
+    const sellerId = req.userId;
+    const result = await cloudinary.uploader.upload(image.path);
     const newProduct = {
       name: name,
-      description: description,
-      sellerId: sellerId,
       price: price,
-      stock: stock,
+      quantity: quantity,
+      description: description,
+      image: result.secure_url,
+      seller: sellerId,
     };
-    const product = await Product.create(newProduct);
+    console.log(newProduct);
+    const product = await newProduct.save();
+    res.json(product);
     res.send({ msg: "Seller Create Products Successful", product });
   } catch (error) {
     console.error(error);

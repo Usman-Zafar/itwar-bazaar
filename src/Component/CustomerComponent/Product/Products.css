@@ -1,0 +1,19 @@
+/* Products.css */
+body {
+  background-color: lightgray;
+}
+
+.ProductCard {
+  margin: 0 auto;
+  max-width: 300px;
+}
+
+.ProductCard img {
+  object-fit: contain;
+  height: 200px;
+  padding-top: 10px;
+}
+
+.Grid-item {
+  padding: 10px !important;
+}

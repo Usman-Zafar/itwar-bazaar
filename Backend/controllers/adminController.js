@@ -8,31 +8,31 @@ const jwt = require("jsonwebtoken");
 const adminControllers = {};
 
 // Admin Signin
-adminControllers.Signin = async (req, res) => {
-  const { email, password } = req.body;
+// adminControllers.Signin = async (req, res) => {
+//   const { email, password } = req.body;
 
-  try {
-    const existingAdmin = await Admin.findOne({ email });
+//   try {
+//     const existingAdmin = await Admin.findOne({ email });
 
-    if (!existingAdmin) {
-      return res
-        .status(404)
-        .json({ error: "Admin with this email does not exist." });
-    }
+//     if (!existingAdmin) {
+//       return res
+//         .status(404)
+//         .json({ error: "Admin with this email does not exist." });
+//     }
 
-    if (existingAdmin.password !== password) {
-      return res.status(401).json({ error: "Incorrect password." });
-    }
+//     if (existingAdmin.password !== password) {
+//       return res.status(401).json({ error: "Incorrect password." });
+//     }
 
-    const token = jwt.sign({ id: existingAdmin.id }, "Secret-Key", {
-      expiresIn: "340924903294434",
-    });
-    res.json({ token });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to sign in admin" });
-  }
-};
+//     const token = jwt.sign({ id: existingAdmin.id }, "Secret-Key", {
+//       expiresIn: "1h",
+//     });
+//     res.json({ token });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Failed to sign in admin" });
+//   }
+//};
 
 // Controller to View Products:
 adminControllers.viewProducts = async (req, res) => {

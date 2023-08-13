@@ -3,13 +3,10 @@ const sellerControllers = require("../controllers/sellerControllers");
 //const { saveimage } = require("../middlewares/saveimage");
 
 const { Router } = require("express");
+//const userControllers = require("../controllers/userController");
 const router = Router();
 
-router.post("/signup", /*saveimage.single("file"),*/ sellerControllers.Signup);
-
-router.post("/signin", sellerControllers.Signin);
-
-router.post("/product", auth, sellerControllers.createProduct);
+//router.post("/product", auth, userControllers.createProduct);
 
 router.put("/product/:id", auth, sellerControllers.editProduct);
 

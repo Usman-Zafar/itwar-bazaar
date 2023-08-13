@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 import { Facebook, Twitter, Instagram } from "@mui/icons-material";
 
 const FooterContainer = styled(Container)({
-  position: "fixed",
+  position: "dynamic",
   bottom: 0,
   backgroundColor: "gray",
 });
