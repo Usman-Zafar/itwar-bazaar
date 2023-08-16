@@ -3,7 +3,6 @@ const cloudinary = v2;
 const multer = require("multer");
 const crypto = require("crypto");
 
-// Cloudinary configuration
 cloudinary.config({
   cloud_name: "dbzoknxuw",
   api_key: "238718399477756",
@@ -14,6 +13,7 @@ const imageUploader = multer().single("image");
 
 module.exports = (req, res, next) => {
   imageUploader(req, res, function (err) {
+    console.log(req.body);
     if (err) {
       return res.status(500).json({ error: "Failed to upload the image." });
     }

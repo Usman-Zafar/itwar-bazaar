@@ -1,13 +1,6 @@
 const User = require("../modals/userModal");
 const Product = require("../modals/productModal");
 const Order = require("../modals/orderModal");
-const cloudinary = require("cloudinary").v2;
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
 
 //const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -66,7 +59,7 @@ userControllers.createProduct = async (req, res) => {
   if (req.type === "seller") {
     try {
       const { name, description, quantity, price } = req.body;
-      const image = req.files.image;
+      const image = req.file.image;
       const sellerId = req.userId;
 
       const newProduct = {
@@ -74,7 +67,7 @@ userControllers.createProduct = async (req, res) => {
         price: price,
         quantity: quantity,
         description: description,
-        //image: result.secure_url,
+        image: image,
         seller: sellerId,
       };
       console.log(image);

@@ -37,8 +37,30 @@ export const ProductPage = () => {
               image: null,
             }}
             validationSchema={ProductSchema}
+            // onSubmit={(values) => {
+            //   const formData = new FormData();
+            //   formData.append("name", values.name);
+            //   formData.append("quantity", values.quantity);
+            //   formData.append("price", values.price);
+            //   formData.append("description", values.description);
+            //   formData.append("image", values.image);
+            //   console.log(formData);
+            //   axios
+            //     .post("http://localhost:8000/user/product", formData, {
+            //       headers: {
+            //         "Content-Type": "application/json",
+            //         Authorization: `${localStorage.getItem("Authorization")}`,
+            //       },
+            //     })
+            //     .then((response) => {
+            //       console.log(response);
+            //       console.log("Product added successfully:", response.data);
+            //     })
+            //     .catch((error) => {
+            //       console.error("Error adding product:", error.response);
+            //     });
+            // }}
             onSubmit={(values) => {
-              console.log(values.image);
               const formData = new FormData();
               formData.append("name", values.name);
               formData.append("quantity", values.quantity);
@@ -49,12 +71,10 @@ export const ProductPage = () => {
               axios
                 .post("http://localhost:8000/user/product", formData, {
                   headers: {
-                    "Content-Type": "multipart/form-data",
                     Authorization: `${localStorage.getItem("Authorization")}`,
                   },
                 })
                 .then((response) => {
-                  console.log(response);
                   console.log("Product added successfully:", response.data);
                 })
                 .catch((error) => {
@@ -124,6 +144,20 @@ export const ProductPage = () => {
                   }}
                 />
                 <br />
+                {/* <TextField
+                  name="image"
+                  variant="standard"
+                  type="file"
+                  error={Boolean(errors.image && touched.image)}
+                  helperText={
+                    errors.image && touched.image && String(errors.image)
+                  }
+                  onChange={(event) => {
+                    const selectedImage = event.target.files[0];
+                    setFieldValue("image", selectedImage);
+                    setUploadedImage(URL.createObjectURL(selectedImage));
+                  }} 
+                />*/}
                 <TextField
                   name="image"
                   variant="standard"
@@ -133,12 +167,14 @@ export const ProductPage = () => {
                     errors.image && touched.image && String(errors.image)
                   }
                   onChange={(event) => {
-                    setFieldValue("image", event.target.files[0]);
-                    setUploadedImage(
-                      URL.createObjectURL(event.target.files[0])
-                    );
+                    const selectedImage = event.target.files[0];
+                    setFieldValue("image", selectedImage);
+
+                    // Generate a temporary URL for displaying the uploaded image
+                    setUploadedImage(URL.createObjectURL(selectedImage));
                   }}
                 />
+
                 <br />
 
                 <Button type="submit" variant="contained" color="success">
