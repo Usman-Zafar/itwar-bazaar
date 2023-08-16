@@ -19,12 +19,12 @@ import { Avatar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
+import { useAuth } from "../AuthContext";
 const pages = ["Home", "Products", "Orders"];
 
 export const CustomerHeader = () => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, loginType } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpenDialog = () => {
@@ -41,7 +41,7 @@ export const CustomerHeader = () => {
   // };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    isLoggedIn(false);
     handleCloseDialog();
   };
 
@@ -53,7 +53,10 @@ export const CustomerHeader = () => {
     setAnchorEl(null);
   };
 
-  const settings = isLoggedIn ? ["Account", "Dashboard", "Logout"] : ["Login"];
+  const settings =
+    isLoggedIn && loginType === "customer"
+      ? ["Account", "Dashboard", "Logout"]
+      : ["Login"];
 
   return (
     <AppBar position="dynamic" sx={{ bgcolor: "gray" }}>

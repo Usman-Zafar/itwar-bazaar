@@ -3,7 +3,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "./AuthContext";
 import axios from "axios";
 
 const LoginSchema = Yup.object().shape({
@@ -13,6 +13,7 @@ const LoginSchema = Yup.object().shape({
 export const Signin = () => {
   const [serverError, setServerError] = useState(null);
   const navigate = useNavigate();
+  const { setIsLoggedIn, setLoginType } = useAuth();
   const handleSignIn = async (values) => {
     try {
       const response = await axios.post(
@@ -24,7 +25,8 @@ export const Signin = () => {
           },
         }
       );
-
+      setIsLoggedIn(true);
+      setLoginType(response.data.type);
       const { token, type } = response.data;
       console.log(type);
       // Store the token in localStorage

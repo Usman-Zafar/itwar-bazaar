@@ -54,7 +54,7 @@ userControllers.Signin = async (req, res) => {
       secretKey,
       { expiresIn: "1h" }
     );
-    console.log(token);
+    //console.log(token);
 
     res.json({ token, type: existingUser.type });
   } catch (error) {
@@ -68,15 +68,16 @@ userControllers.createProduct = async (req, res) => {
       const { name, description, quantity, price } = req.body;
       const image = req.files.image;
       const sellerId = req.userId;
-      const result = await cloudinary.uploader.upload(image.path);
+
       const newProduct = {
         name: name,
         price: price,
         quantity: quantity,
         description: description,
-        image: result.secure_url,
+        //image: result.secure_url,
         seller: sellerId,
       };
+      console.log(image);
       console.log(newProduct);
       const product = await newProduct.save();
       res.json(product);

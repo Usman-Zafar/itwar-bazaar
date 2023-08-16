@@ -10,6 +10,8 @@ import {
 import axios from "axios";
 //import { Cart } from "../Cart";
 import "./Products.css";
+import { useAuth } from "../../AuthContext";
+import { Link } from "react-router-dom";
 
 const ProductCard = ({ product, onAddToCart }) => {
   return (
@@ -45,6 +47,7 @@ const ProductsList = ({ products, onAddToCart }) => {
 
 export const Product = () => {
   const [products, setProducts] = useState([]);
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     fetchProducts();
@@ -67,7 +70,20 @@ export const Product = () => {
   return (
     <div>
       <h1>Product List</h1>
-      <ProductsList products={products} onAddToCart={handleAddToCart} />
+      <ProductsList
+        products={products}
+        onAddToCart={() =>
+          isLoggedIn ? (
+            <>
+              <Link to="/Cart">Add to Cart</Link>
+              <button onClick={handleAddToCart}>Add to Cart</button>
+            </>
+          ) : (
+            <Link to="/signin">Add to Cart</Link>
+          )
+        }
+      />
+
       {/* <Cart onAddToCart={handleAddToCart} /> */}
     </div>
   );
